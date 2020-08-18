@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common
 import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { Region } from './region';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,13 @@ export class ClienteService {
    */
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(private http: HttpClient, private router: Router) { }
+
+  /**
+   * @returns devulve todas las regiones
+   */
+  getRegiones():Observable<Region[]>{
+    return this.http.get<Region[]>(this.urlEndPoint+'/regiones');
+  }
 
   /**
    * método para devolver el listado de clientes
