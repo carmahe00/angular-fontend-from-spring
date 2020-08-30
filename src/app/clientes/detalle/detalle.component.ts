@@ -4,6 +4,7 @@ import { ClienteService } from '../cliente.service';
 import swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
 import { ModalService } from './modal.service';
+import { AuthService } from '../../usuarios/auth.service';
 
 @Component({
   selector: 'detalle-cliente',
@@ -23,12 +24,17 @@ export class DetalleComponent implements OnInit {
    * @param modalService sirve para cerrar el modal; además enviamos emite el cliente
    */
   constructor(private clienteService:ClienteService,
-    private _modalService:ModalService) { }
+    private _modalService:ModalService,
+    private _authService:AuthService) { }
 
   ngOnInit(): void { }
 
   get modalService(){
     return this._modalService;
+  }
+
+  get authService(){
+    return this._authService;
   }
 
   seleccionarFoto(event){

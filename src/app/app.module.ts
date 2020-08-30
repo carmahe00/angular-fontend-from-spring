@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID} from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
 
 //Variables para fecha en español
@@ -25,8 +25,14 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { FormComponent } from './clientes/form.component';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { DetalleComponent } from './clientes/detalle/detalle.component';
+import { LoginComponent } from './usuarios/login.component';
+
+//Interceptores
+import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
+import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
 
 registerLocaleData(localeEs, 'es');
+
 
 @NgModule({
   declarations: [
@@ -37,7 +43,8 @@ registerLocaleData(localeEs, 'es');
     ClientesComponent,
     FormComponent,
     PaginatorComponent,
-    DetalleComponent
+    DetalleComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +57,11 @@ registerLocaleData(localeEs, 'es');
   ],
   providers: [
     //Variable global en español
-    {provide:LOCALE_ID, useValue:'es'}
+    {provide:LOCALE_ID, useValue:'es'},
+    //Clase para hacer peticiones y agregar el token
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    //Clase para obtener el error 401 y 403
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

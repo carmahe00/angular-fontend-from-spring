@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { Cliente } from './cliente';
 
 import { Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http'
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http'
 import { map, catchError, tap } from 'rxjs/operators';
-import swal from 'sweetalert2';
+
 import { Router } from '@angular/router';
 import { Region } from './region';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,17 +18,17 @@ export class ClienteService {
    * @param urlEndPoint es la url por defecto
    */
   private urlEndPoint: string = 'http://localhost:8080/api/clientes';
-  /**
-   * @param httpHeaders es el tipo de informaciones que enviamos(JSON)
-   */
-  private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
   constructor(private http: HttpClient, private router: Router) { }
+
+  
+
 
   /**
    * @returns devulve todas las regiones
    */
-  getRegiones():Observable<Region[]>{
-    return this.http.get<Region[]>(this.urlEndPoint+'/regiones');
+  getRegiones(): Observable<Region[]> {
+    return this.http.get<Region[]>(this.urlEndPoint + '/regiones' );
   }
 
   /**
@@ -61,14 +62,15 @@ export class ClienteService {
    * @method catchError tiene dos posibles estado que se manejan de fotma diferente (400  y 500)
    */
   create(cliente: Cliente): Observable<Cliente> {
-    return this.http.post(this.urlEndPoint, cliente, { headers: this.httpHeaders }).pipe(
+    return this.http.post(this.urlEndPoint, cliente, {}).pipe(
       map((response: any) => response.cliente as Cliente),
       catchError(e => {
+       
         if (e.status == 400) {
           return throwError(e);
         }
         console.error(e);
-        swal.fire({ title: e.error.mensaje, text: e.error.error, icon: 'error' });
+        
         return throwError(e);
       })
     );
@@ -82,9 +84,10 @@ export class ClienteService {
   getCliente(id): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
-        this.router.navigate(['/clientes']);
-        console.log(e);
-        swal.fire('Error al buscar el cliente', e.error.mensaje, 'error');
+        if(e.status != 401 && e.error.mensaje){
+          this.router.navigate(['/clientes']);
+          console.log(e.error.mensaje);
+        }
         return catchError(e)
       })
     );
@@ -97,13 +100,13 @@ export class ClienteService {
    * @method catchError tiene dos posibles estado que se manejan de fotma diferente (400  y 500)
    */
   update(cliente: Cliente): Observable<any> {
-    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente, { headers: this.httpHeaders }).pipe(
+    return this.http.put<any>(`${this.urlEndPoint}/${cliente.id}`, cliente).pipe(
       catchError(e => {
+        
         if (e.status == 400) {
           return throwError(e);
         }
         console.error(e);
-        swal.fire({ title: e.error.mensaje, text: e.error.error, icon: 'error' });
         return throwError(e);
       })
     );
@@ -114,10 +117,11 @@ export class ClienteService {
    * @param id es el identificador del cliente
    */
   delete(id: number): Observable<Cliente> {
-    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, { headers: this.httpHeaders }).pipe(
+    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
+        
         console.error(e);
-        swal.fire({ title: e.error.mensaje, text: e.error.error, icon: 'error' });
+        
         return throwError(e);
       })
     );
@@ -134,8 +138,11 @@ export class ClienteService {
     formData.append("archivo", archivo);
     formData.append("id", id);
 
+    
+
     const req = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, {
       reportProgress: true
+    
     })
 
     return this.http.request(req);
