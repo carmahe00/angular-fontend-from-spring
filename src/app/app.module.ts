@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID} from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 //Variables para fecha en español
 import localeEs from '@angular/common/locales/es';
@@ -13,6 +13,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //Angular Material MatDatepicker
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 //Modulos personalizados
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +33,10 @@ import { LoginComponent } from './usuarios/login.component';
 //Interceptores
 import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
 import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
+import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
+import { FacturasComponent } from './facturas/facturas.component';
+
+
 
 registerLocaleData(localeEs, 'es');
 
@@ -44,7 +51,9 @@ registerLocaleData(localeEs, 'es');
     FormComponent,
     PaginatorComponent,
     DetalleComponent,
-    LoginComponent
+    LoginComponent,
+    DetalleFacturaComponent,
+    FacturasComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +62,11 @@ registerLocaleData(localeEs, 'es');
     FormsModule,
     BrowserAnimationsModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   providers: [
     //Variable global en español

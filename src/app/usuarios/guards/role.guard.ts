@@ -27,11 +27,12 @@ export class RoleGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    let role = next.data['role'] as string;
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return false;
     }
+    let role = next.data['role'] as string;
+    console.log(role)
     if (this.authService.hasRole(role)) {
       return true;
     }

@@ -65,12 +65,9 @@ export class ClienteService {
     return this.http.post(this.urlEndPoint, cliente, {}).pipe(
       map((response: any) => response.cliente as Cliente),
       catchError(e => {
-       
         if (e.status == 400) {
           return throwError(e);
         }
-        console.error(e);
-        
         return throwError(e);
       })
     );
@@ -106,7 +103,6 @@ export class ClienteService {
         if (e.status == 400) {
           return throwError(e);
         }
-        console.error(e);
         return throwError(e);
       })
     );
@@ -119,9 +115,6 @@ export class ClienteService {
   delete(id: number): Observable<Cliente> {
     return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
-        
-        console.error(e);
-        
         return throwError(e);
       })
     );
